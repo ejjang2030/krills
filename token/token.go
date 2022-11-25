@@ -27,7 +27,7 @@ const (
 	GT = ">"
 
 	EQ = "=="
-	NOT_EQ = "!="
+	NOT_EQ = "!"
 
 	// seperator
 	COMMA 	= ","
