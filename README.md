@@ -33,4 +33,49 @@ let func1 = fn(x, y) {
   }
 ```
 
-###
+## Future Goals to Implementation
+### Loop
+1. Condition Loop
+```
+    while: a.next() { 
+        // statements
+    }
+
+2. for Loop
+``` 
+    for: (let i = 0; i < a.length; i++) {
+        // statements 
+    }
+```
+3. Nested for Loop in one Line
+``` 
+    for: (let i in range(1, 3)), (let j in range(1, 10)) {
+        print("$i X $j = ${i * j}")
+    }
+```
+This code is same to below code.
+```
+    for: (let i in range(1, 3)) {
+        for: (let j in range(1, 10)) {
+            print("$i X $j = ${i * j}")
+        }
+    }
+```
+4. Nested while Loop in one Line
+```
+    while: (!a.isEmpty()), (a.value != 0) {
+        // statements
+    }
+```
+This code is same to below code.
+```
+    while: (!a.isEmpty()) {
+        while: (a.value != 0) {
+            // statements
+        }
+    }
+```
+ 
+
+
+
