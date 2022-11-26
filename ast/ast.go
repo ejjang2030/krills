@@ -108,6 +108,12 @@ type CallExpression struct {
 	Arguments []Expression
 }
 
+type IndexExpression struct {
+	Token token.Token
+	Left  Expression
+	Index Expression
+}
+
 // base function set
 func (p *Program) TokenLiteral() string {
 	if len(p.Statements) > 0 {
@@ -307,6 +313,21 @@ func (ce *CallExpression) String() string {
 	out.WriteString("(")
 	out.WriteString(strings.Join(args, ", "))
 	out.WriteString(")")
+
+	return out.String()
+}
+
+// index expression function set
+func (ie *IndexExpression) expressionNode()      {}
+func (ie *IndexExpression) TokenLiteral() string { return ie.Token.Literal }
+func (ie *IndexExpression) String() string {
+	var out bytes.Buffer
+
+	out.WriteString("(")
+	out.WriteString(ie.Left.String())
+	out.WriteString("[")
+	out.WriteString(ie.Index.String())
+	out.WriteString("])")
 
 	return out.String()
 }
