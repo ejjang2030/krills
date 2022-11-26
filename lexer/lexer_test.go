@@ -1,8 +1,8 @@
 package lexer
 
 import (
-	"testing"
 	"krills/token"
+	"testing"
 )
 
 func TestNextToken(t *testing.T) {
@@ -24,26 +24,28 @@ if (5 < 10) {
 
 10 == 10;
 10 != 9;
+"foobar"
+"foo bar"
 `
 
 	tests := []struct {
-		expectedType 	token.TokenType
-		expectedLiteral	string
-	} {
-		{token.LET, "변수"},
+		expectedType    token.TokenType
+		expectedLiteral string
+	}{
+		{token.LET, "let"},
 		{token.IDENT, "five"},
 		{token.ASSIGN, "="},
 		{token.INT, "5"},
 		{token.SEMICOLON, ";"},
-		{token.LET, "변수"},
+		{token.LET, "let"},
 		{token.IDENT, "ten"},
 		{token.ASSIGN, "="},
 		{token.INT, "10"},
 		{token.SEMICOLON, ";"},
-		{token.LET, "변수"},
+		{token.LET, "let"},
 		{token.IDENT, "add"},
 		{token.ASSIGN, "="},
-		{token.FUNCTION, "함수"},
+		{token.FUNCTION, "fn"},
 		{token.LPAREN, "("},
 		{token.IDENT, "x"},
 		{token.COMMA, ","},
@@ -56,7 +58,7 @@ if (5 < 10) {
 		{token.SEMICOLON, ";"},
 		{token.RBRACE, "}"},
 		{token.SEMICOLON, ";"},
-		{token.LET, "변수"},
+		{token.LET, "let"},
 		{token.IDENT, "result"},
 		{token.ASSIGN, "="},
 		{token.IDENT, "add"},
@@ -78,21 +80,21 @@ if (5 < 10) {
 		{token.GT, ">"},
 		{token.INT, "5"},
 		{token.SEMICOLON, ";"},
-		{token.IF, "조건"},
+		{token.IF, "if"},
 		{token.LPAREN, "("},
 		{token.INT, "5"},
 		{token.LT, "<"},
 		{token.INT, "10"},
 		{token.RPAREN, ")"},
 		{token.LBRACE, "{"},
-		{token.RETURN, "반환"},
-		{token.TRUE, "참"},
+		{token.RETURN, "return"},
+		{token.TRUE, "true"},
 		{token.SEMICOLON, ";"},
 		{token.RBRACE, "}"},
-		{token.ELSE, "외"},
+		{token.ELSE, "else"},
 		{token.LBRACE, "{"},
-		{token.RETURN, "반환"},
-		{token.FALSE, "거짓"},
+		{token.RETURN, "return"},
+		{token.FALSE, "false"},
 		{token.SEMICOLON, ";"},
 		{token.RBRACE, "}"},
 		{token.INT, "10"},
@@ -103,6 +105,8 @@ if (5 < 10) {
 		{token.NOT_EQ, "!="},
 		{token.INT, "9"},
 		{token.SEMICOLON, ";"},
+		{token.STRING, "foobar"},
+		{token.STRING, "foo bar"},
 		{token.EOF, ""},
 	}
 
@@ -118,4 +122,3 @@ if (5 < 10) {
 		}
 	}
 }
-
