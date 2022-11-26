@@ -90,4 +90,24 @@ var builtins = map[string]*object.Builtin{
 			return &object.Array{Elements: newElements}
 		},
 	},
+	// "map": &object.Builtin{
+	// 	Fn: func(arr object.Array, f object.Function) object.Object {
+	// 		if len(args) != 2 {
+	// 			return newError("wrong number of arguments. got=%d, want=2", len(args))
+	// 		}
+	// 		if args[0].Type() != object.ARRAY_OBJ {
+	// 			return newError("argument to map must be ARRAY, got %s", args[0].Type())
+	// 		}
+
+	// 		arr := args[0].(*object.Array)
+	// 		length := len(arr.Elements)
+
+	// 		newElements := make([]object.Object, length, length)
+	// 		for i, v := range newElements {
+	// 			newElements[i] = f(v)
+	// 		}
+
+	// 		return &object.Array{Elements: newElements}
+	// 	},
+	// },
 }
