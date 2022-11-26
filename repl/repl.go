@@ -4,14 +4,14 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"krills/evaluator"
 	"krills/lexer"
 	"krills/parser"
 )
 
 const PROMPT = ">> "
 
-const KRILLS_SKIN = 
-`||    //  ||======     ||   ||          ||          /======= 
+const KRILLS_SKIN = `||    //  ||======     ||   ||          ||          /======= 
 ||   //   ||      \    ||   ||          ||         |
 ||  //    ||       |   ||   ||          ||         |
 || //     ||______/    ||   ||          ||          \_______
@@ -41,8 +41,12 @@ func Start(in io.Reader, out io.Writer) {
 			continue
 		}
 
-		io.WriteString(out, program.String())
-		io.WriteString(out, "\n")
+		evaluated := evaluator.Eval(program)
+		if evaluated != nil {
+			io.WriteString(out, evaluated.Inspect())
+			io.WriteString(out, "\n")
+		}
+
 	}
 }
 
@@ -54,4 +58,3 @@ func printParserErrors(out io.Writer, errors []string) {
 		io.WriteString(out, "\t"+msg+"\n")
 	}
 }
-
