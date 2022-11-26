@@ -8,7 +8,7 @@ Krills is Simple Programming Language.
 Then access to the directory which at the git cloned the files with `cd` command in the terminal or cmd.<br>
 Run this command `go run main.go` in the directory.
 
-## Sytax
+## Syntax
 
 ### Variable Types 
 1. Integer
