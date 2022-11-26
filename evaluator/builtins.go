@@ -102,6 +102,11 @@ var builtins = map[string]*object.Builtin{
 			return NULL
 		},
 	},
+	// "exit": &object.Builtin{
+	// 	Fn: func() {
+	// 		os.Exit(3)
+	// 	},
+	// },
 	// "map": &object.Builtin{
 	// 	Fn: func(arr object.Array, f object.Function) object.Object {
 	// 		if len(args) != 2 {
