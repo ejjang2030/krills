@@ -40,7 +40,7 @@ let func1 = fn(x, y) {
     while: a.next() { 
         // statements
     }
-
+```
 2. for Loop
 ``` 
     for: (let i = 0; i < a.length; i++) {
