@@ -1,7 +1,7 @@
 # krills
 Krills is Simple Programming Language.
 
-## For Start
+## Getting Started
 ### git clone command
 `git clone https://github.com/ejjang2030/krills.git`
 
