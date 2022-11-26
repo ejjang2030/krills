@@ -15,6 +15,8 @@ Run this command `go run main.go` in the directory.
 2. Boolean
 3. String
 4. Function
+5. Array
+6. HashMap
 
 ### Variable Definition and Initialization
 ```
