@@ -28,10 +28,17 @@ Run this command `go run main.go` in the directory.
 
 ### Function Definition
 ```
-let func1 = fn(x, y) {
+let func1 = fun(x, y) {
     x + y;
   }
 ```
+or
+```
+fun test(x) {
+    return x;
+}
+```
+**function identifier must not contain numbers**
 
 ## Future Goals to Implementation
 ### Loop
