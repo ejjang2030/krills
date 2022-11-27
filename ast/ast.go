@@ -104,7 +104,25 @@ type IfExpression struct {
 	Token       token.Token
 	Condition   Expression
 	Consequence *BlockStatement
-	Alternative *BlockStatement
+}
+
+type IfElseExpression struct {
+	Token        token.Token
+	IfExpression IfExpression
+	Alternative  *BlockStatement
+}
+
+type IfElseIfExpression struct {
+	Token             token.Token
+	IfExpression      IfExpression
+	ElseIfExpressions []IfExpression
+}
+
+type IfElseIfElseExpression struct {
+	Token             token.Token
+	IfExpression      IfExpression
+	ElseIfExpressions []IfExpression
+	Alternative       *BlockStatement
 }
 
 type CallExpression struct {
@@ -313,9 +331,50 @@ func (ie *IfExpression) String() string {
 	out.WriteString(" ")
 	out.WriteString(ie.Consequence.String())
 
-	if ie.Alternative != nil {
+	return out.String()
+}
+
+func (iee *IfElseExpression) expressionNode()      {}
+func (iee *IfElseExpression) TokenLiteral() string { return iee.Token.Literal }
+func (iee *IfElseExpression) String() string {
+	var out bytes.Buffer
+
+	out.WriteString("if")
+	out.WriteString(iee.IfExpression.Condition.String())
+	out.WriteString(" ")
+	out.WriteString(iee.IfExpression.Consequence.String())
+
+	if iee.Alternative != nil {
 		out.WriteString("else ")
-		out.WriteString(ie.Alternative.String())
+		out.WriteString(iee.Alternative.String())
+	}
+
+	return out.String()
+}
+
+func (ieie *IfElseIfElseExpression) expressionNode()      {}
+func (ieie *IfElseIfElseExpression) TokenLiteral() string { return ieie.Token.Literal }
+func (ieie *IfElseIfElseExpression) String() string {
+	var out bytes.Buffer
+
+	out.WriteString("if")
+	out.WriteString(ieie.IfExpression.Condition.String())
+	out.WriteString(" ")
+	out.WriteString(ieie.IfExpression.Consequence.String())
+
+	if ieie.ElseIfExpressions != nil {
+		for i := 0; i < len(ieie.ElseIfExpressions); i++ {
+			exp := ieie.ElseIfExpressions[i]
+			out.WriteString("else if")
+			out.WriteString(exp.Condition.String())
+			out.WriteString(" ")
+			out.WriteString(exp.Consequence.String())
+		}
+	}
+
+	if ieie.Alternative != nil {
+		out.WriteString("else ")
+		out.WriteString(ieie.Alternative.String())
 	}
 
 	return out.String()

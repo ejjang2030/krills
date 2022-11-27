@@ -66,7 +66,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.TRUE, p.parseBoolean)
 	p.registerPrefix(token.FALSE, p.parseBoolean)
 	p.registerPrefix(token.LPAREN, p.parseGroupedExpression)
-	p.registerPrefix(token.IF, p.parseIfExpression)
+	p.registerPrefix(token.IF, p.parseIfElseIfElseExpression)
 	p.registerPrefix(token.FUNCTION, p.parseFunctionLiteral)
 	p.registerPrefix(token.STRING, p.parseStringLiteral)
 	p.registerPrefix(token.LBRACKET, p.parseArrayLiteral)
@@ -212,6 +212,30 @@ func (p *Parser) parseIfExpression() ast.Expression {
 
 	expression.Consequence = p.parseBlockStatement()
 
+	return expression
+}
+
+func (p *Parser) parseIfElseExpression() ast.Expression {
+	expression := &ast.IfElseExpression{Token: p.curToken}
+
+	if !p.expectPeek(token.LPAREN) {
+		return nil
+	}
+
+	p.nextToken()
+
+	expression.IfExpression.Condition = p.parseExpression(LOWEST)
+
+	if !p.expectPeek(token.RPAREN) {
+		return nil
+	}
+
+	if !p.expectPeek(token.LBRACE) {
+		return nil
+	}
+
+	expression.IfExpression.Consequence = p.parseBlockStatement()
+
 	if p.peekTokenIs(token.ELSE) {
 		p.nextToken()
 
@@ -219,6 +243,51 @@ func (p *Parser) parseIfExpression() ast.Expression {
 			return nil
 		}
 		expression.Alternative = p.parseBlockStatement()
+	}
+
+	return expression
+}
+
+func (p *Parser) parseIfElseIfElseExpression() ast.Expression {
+	expression := &ast.IfElseIfElseExpression{Token: p.curToken}
+
+	// if expression
+	if !p.expectPeek(token.LPAREN) {
+		return nil
+	}
+	p.nextToken()
+	expression.IfExpression.Condition = p.parseExpression(LOWEST)
+	if !p.expectPeek(token.RPAREN) {
+		return nil
+	}
+	if !p.expectPeek(token.LBRACE) {
+		return nil
+	}
+	expression.IfExpression.Consequence = p.parseBlockStatement()
+
+	// else if expressions
+	i := 0
+	for p.peekTokenIs(token.ELSE) {
+		p.nextToken()
+		if p.peekTokenIs(token.IF) {
+			p.nextToken()
+			curToken := p.curToken
+			if !p.expectPeek(token.LPAREN) {
+				return nil
+			}
+			condition := p.parseExpression(LOWEST)
+			if !p.expectPeek(token.LBRACE) {
+				return nil
+			}
+			p.nextToken()
+			consequence := p.parseBlockStatement()
+			ifExpression := ast.IfExpression{Token: curToken, Condition: condition, Consequence: consequence}
+			expression.ElseIfExpressions = append(expression.ElseIfExpressions, ifExpression)
+			i++
+		} else if p.peekTokenIs(token.LBRACE) {
+			p.nextToken()
+			expression.Alternative = p.parseBlockStatement()
+		}
 	}
 
 	return expression
@@ -485,6 +554,7 @@ func (p *Parser) parseHashLiteral() ast.Expression {
 		key := p.parseExpression(LOWEST)
 
 		if !p.expectPeek(token.COLON) {
+			fmt.Printf("parseHashLiteral()")
 			return nil
 		}
 

@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
+	"krills/repl"
 	"os"
 	"os/user"
-	"krills/repl"
 )
 
 func main() {
+
 	user, err := user.Current()
 	if err != nil {
 		panic(err)

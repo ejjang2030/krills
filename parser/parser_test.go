@@ -324,11 +324,6 @@ func TestIfExpression(t *testing.T) {
 	if !testIdentifier(t, consequence.Expression, "x") {
 		return
 	}
-
-	if exp.Alternative != nil {
-		t.Errorf("exp.Alternative.Statements was not nil. got=%+v", exp.Alternative)
-	}
-
 }
 
 func TestIfElseExpression(t *testing.T) {
@@ -348,22 +343,22 @@ func TestIfElseExpression(t *testing.T) {
 		t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T", program.Statements[0])
 	}
 
-	exp, ok := stmt.Expression.(*ast.IfExpression)
+	exp, ok := stmt.Expression.(*ast.IfElseExpression)
 	if !ok {
 		t.Fatalf("stmt.Expression is not ast.IfExpression. got=%T", stmt.Expression)
 	}
 
-	if !testInfixExpression(t, exp.Condition, "x", "<", "y") {
+	if !testInfixExpression(t, exp.IfExpression.Condition, "x", "<", "y") {
 		return
 	}
 
-	if len(exp.Consequence.Statements) != 1 {
-		t.Errorf("consequence is not 1 statements. got=%d\n", len(exp.Consequence.Statements))
+	if len(exp.IfExpression.Consequence.Statements) != 1 {
+		t.Errorf("consequence is not 1 statements. got=%d\n", len(exp.IfExpression.Consequence.Statements))
 	}
 
-	consequence, ok := exp.Consequence.Statements[0].(*ast.ExpressionStatement)
+	consequence, ok := exp.IfExpression.Consequence.Statements[0].(*ast.ExpressionStatement)
 	if !ok {
-		t.Fatalf("Statements[0] is not ast.ExpressionStatement. got=%T", exp.Consequence.Statements[0])
+		t.Fatalf("Statements[0] is not ast.ExpressionStatement. got=%T", exp.IfExpression.Consequence.Statements[0])
 	}
 
 	if !testIdentifier(t, consequence.Expression, "x") {
@@ -379,8 +374,26 @@ func TestIfElseExpression(t *testing.T) {
 			return
 		}
 	}
-
 }
+
+// func TestIfElseIfElseExpressions(t *testing.T) {
+// 	input :=
+// 		`
+// let a = 8;
+// if(a > 10) {
+// 	return "over 10";
+// } else if(a > 5) {
+// 	return "over 5";
+// } else {
+// 	return "below 5";
+// }
+// `
+// 	l := lexer.New(input)
+// 	p := New(l)
+// 	program := p.ParseProgram()
+// 	checkParserErrors(t, p)
+
+// }
 
 // test parsings
 func TestOperatorPrecedenceParsing(t *testing.T) {

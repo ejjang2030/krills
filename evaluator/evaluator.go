@@ -48,6 +48,10 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		return evalBlockStatement(node, env)
 	case *ast.IfExpression:
 		return evalIfExpression(node, env)
+	case *ast.IfElseExpression:
+		return evalIfElseExpression(node, env)
+	case *ast.IfElseIfElseExpression:
+		return evalIfElseIfElseExpression(node, env)
 	case *ast.ReturnStatement:
 		val := Eval(node.ReturnValue, env)
 		if isError(val) {
@@ -286,10 +290,47 @@ func evalIfExpression(ie *ast.IfExpression, env *object.Environment) object.Obje
 	}
 	if isTruthy(condition) {
 		return Eval(ie.Consequence, env)
+	} else {
+		return NULL
+	}
+}
+
+func evalIfElseExpression(ie *ast.IfElseExpression, env *object.Environment) object.Object {
+	condition := Eval(ie.IfExpression.Condition, env)
+	if isError(condition) {
+		return condition
+	}
+	if isTruthy(condition) {
+		return Eval(ie.IfExpression.Consequence, env)
 	} else if ie.Alternative != nil {
 		return Eval(ie.Alternative, env)
 	} else {
 		return NULL
+	}
+}
+
+func evalIfElseIfElseExpression(ieie *ast.IfElseIfElseExpression, env *object.Environment) object.Object {
+	condition := Eval(ieie.IfExpression.Condition, env)
+	if isError(condition) {
+		return condition
+	}
+	if isTruthy(condition) {
+		return Eval(ieie.IfExpression.Consequence, env)
+	} else {
+		for i := 0; i < len(ieie.ElseIfExpressions); i++ {
+			elseCondition := Eval(ieie.ElseIfExpressions[i].Condition, env)
+			if isError(elseCondition) {
+				return elseCondition
+			}
+			if isTruthy(elseCondition) {
+				return Eval(ieie.ElseIfExpressions[i].Consequence, env)
+			}
+		}
+		if ieie.Alternative != nil {
+			return Eval(ieie.Alternative, env)
+		} else {
+			return NULL
+		}
 	}
 }
 
