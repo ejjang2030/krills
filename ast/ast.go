@@ -71,6 +71,12 @@ type ReturnStatement struct {
 	ReturnValue Expression
 }
 
+type FunctionStatement struct {
+	Token token.Token
+	Name  *Identifier
+	Value *FunctionLiteral
+}
+
 type ExpressionStatement struct {
 	Token      token.Token
 	Expression Expression
@@ -264,6 +270,26 @@ func (rs *ReturnStatement) String() string {
 	}
 
 	out.WriteString(";")
+
+	return out.String()
+}
+
+func (fs *FunctionStatement) statementNode()       {}
+func (fs *FunctionStatement) TokenLiteral() string { return fs.Token.Literal }
+func (fs *FunctionStatement) String() string {
+	var out bytes.Buffer
+
+	params := []string{}
+	for _, p := range fs.Value.Parameters {
+		params = append(params, p.String())
+	}
+
+	out.WriteString("func ")
+	out.WriteString(fs.Name.Value)
+	out.WriteString("(")
+	out.WriteString(strings.Join(params, ", "))
+	out.WriteString(")")
+	out.WriteString(fs.Value.Body.String())
 
 	return out.String()
 }

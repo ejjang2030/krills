@@ -112,6 +112,8 @@ func (p *Parser) parseStatement() ast.Statement {
 		return p.parseLetStatement()
 	case token.RETURN:
 		return p.parseReturnStatement()
+	case token.FUNCTION:
+		return p.parseFunctionStatement()
 	default:
 		return p.parseExpressionStatement()
 	}
@@ -137,6 +139,35 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 	for p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
+
+	return stmt
+}
+
+func (p *Parser) parseFunctionStatement() *ast.FunctionStatement {
+	funToken := p.curToken
+	stmt := &ast.FunctionStatement{Token: funToken}
+
+	if !p.expectPeek(token.IDENT) {
+		return nil
+	}
+	identToken := p.curToken
+	stmt.Name = &ast.Identifier{Token: identToken, Value: p.curToken.Literal}
+
+	funLit := &ast.FunctionLiteral{Token: funToken}
+
+	if !p.expectPeek(token.LPAREN) {
+		return nil
+	}
+
+	funLit.Parameters = p.parseFunctionParameters()
+
+	if !p.expectPeek(token.LBRACE) {
+		return nil
+	}
+
+	funLit.Body = p.parseBlockStatement()
+
+	stmt.Value = funLit
 
 	return stmt
 }
