@@ -100,6 +100,11 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.LBRACKET, l.ch)
 	case ']':
 		tok = newToken(token.RBRACKET, l.ch)
+	case '\\':
+		if l.peekChar() == 0 {
+			tok.Literal = "\\"
+			tok.Type = token.EOL
+		}
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF
@@ -160,6 +165,14 @@ func (l *Lexer) peekChar() byte {
 		return 0
 	} else {
 		return l.input[l.readPosition]
+	}
+}
+
+func (l *Lexer) beforeChar() byte {
+	if l.readPosition == 0 {
+		return 0
+	} else {
+		return l.input[l.readPosition - 1]
 	}
 }
 

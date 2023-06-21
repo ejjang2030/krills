@@ -8,51 +8,52 @@ type Token struct {
 }
 
 const (
-	ILLEGAL = "ILLEGAL"
-	EOF     = "EOF"
+	ILLEGAL 	= "ILLEGAL"
+	EOF      	= "EOF"
+	EOL 		= "EOL"
 
 	// identifier + literal
-	IDENT  = "IDENT" // add, foobar, x, y, ...
-	INT    = "INT"   // 12345
-	STRING = "STRING"
+	IDENT  		= "IDENT" // add, foobar, x, y, ...
+	INT    		= "INT"   // 12345
+	STRING 		= "STRING"
 
 	// operator
-	ASSIGN   = "="
-	PLUS     = "+"
-	MINUS    = "-"
-	BANG     = "!"
-	ASTERISK = "*"
-	SLASH    = "/"
-	POWER	 = "^"
+	ASSIGN   	= "="
+	PLUS     	= "+"
+	MINUS    	= "-"
+	BANG     	= "!"
+	ASTERISK 	= "*"
+	SLASH    	= "/"
+	POWER	 	= "^"
 
-	LT = "<"
-	GT = ">"
-	LE = "<="
-	GE = ">="
+	LT 			= "<"
+	GT 			= ">"
+	LE 			= "<="
+	GE 			= ">="
 
-	EQ     = "=="
-	NOT_EQ = "!"
+	EQ     		= "=="
+	NOT_EQ 		= "!"
 
 	// seperator
-	COMMA     = ","
-	SEMICOLON = ";"
-	COLON     = ":"
+	COMMA     	= ","
+	SEMICOLON 	= ";"
+	COLON     	= ":"
 
-	LPAREN   = "("
-	RPAREN   = ")"
-	LBRACE   = "{"
-	RBRACE   = "}"
-	LBRACKET = "["
-	RBRACKET = "]"
+	LPAREN   	= "("
+	RPAREN   	= ")"
+	LBRACE  	= "{"
+	RBRACE   	= "}"
+	LBRACKET 	= "["
+	RBRACKET 	= "]"
 
 	// keywords
-	FUNCTION = "FUNCTION"
-	LET      = "LET"
-	TRUE     = "TRUE"
-	FALSE    = "FALSE"
-	IF       = "IF"
-	ELSE     = "ELSE"
-	RETURN   = "RETURN"
+	FUNCTION 	= "FUNCTION"
+	LET     	= "LET"
+	TRUE     	= "TRUE"
+	FALSE    	= "FALSE"
+	IF       	= "IF"
+	ELSE     	= "ELSE"
+	RETURN   	= "RETURN"
 )
 
 var keywords = map[string]TokenType{

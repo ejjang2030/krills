@@ -30,15 +30,27 @@ ___  __    ________  ___  ___       ___       ________
 func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
 	env := object.NewEnvironment()
-
+	isContinue := false
+	line := ""
 	for {
-		fmt.Fprintf(out, PROMPT)
+		if !isContinue {
+			fmt.Fprintf(out, PROMPT)
+		}
 		scanned := scanner.Scan()
 		if !scanned {
 			return
 		}
-
-		line := scanner.Text()
+		if isContinue {
+			line += scanner.Text()
+		} else {
+			line = scanner.Text()
+		}
+		if line[len(line) - 1] == '\\' {
+			isContinue = true
+			continue
+		} else {
+			isContinue = false
+		}
 		l := lexer.New(line)
 		p := parser.New(l)
 

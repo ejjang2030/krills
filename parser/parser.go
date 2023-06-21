@@ -25,6 +25,8 @@ var precedences = map[token.TokenType]int{
 	token.NOT_EQ:   EQUALS,
 	token.LT:       LESSGREATER,
 	token.GT:       LESSGREATER,
+	token.LE:		LESSGREATER,
+	token.GE: 		LESSGREATER,
 	token.PLUS:     SUM,
 	token.MINUS:    SUM,
 	token.SLASH:    PRODUCT,
@@ -92,6 +94,10 @@ func New(l *lexer.Lexer) *Parser {
 func (p *Parser) nextToken() {
 	p.curToken = p.peekToken
 	p.peekToken = p.l.NextToken()
+	fmt.Sprintf("curToken : %s", p.curToken.Literal)
+	if p.curToken.Type == token.EOL {
+		p.nextToken()
+	}
 }
 
 func (p *Parser) ParseProgram() *ast.Program {
@@ -208,7 +214,7 @@ func (p *Parser) parseExpression(precedence int) ast.Expression {
 	if prefix == nil {
 		p.noPrefixParseFnError(p.curToken.Type)
 		return nil
-	}
+	} 
 	leftExp := prefix()
 
 	for !p.peekTokenIs(token.SEMICOLON) && precedence < p.peekPrecedence() {
