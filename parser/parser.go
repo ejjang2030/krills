@@ -94,7 +94,6 @@ func New(l *lexer.Lexer) *Parser {
 func (p *Parser) nextToken() {
 	p.curToken = p.peekToken
 	p.peekToken = p.l.NextToken()
-	fmt.Sprintf("curToken : %s", p.curToken.Literal)
 	if p.curToken.Type == token.EOL {
 		p.nextToken()
 	}
